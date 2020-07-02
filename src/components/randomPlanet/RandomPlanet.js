@@ -12,12 +12,17 @@ export default () => {
     const{request, loading, error} = useHttp();
 
     useEffect(() => {
+        let canceled = false;
         const interval = setInterval(
-            () => updateDataList("planet", PLANET, setState, request, Math.floor(Math.random() * 25 +2)),
+            () => !canceled
+                && updateDataList("planet", PLANET, setState, request, Math.floor(Math.random() * 25 +2)),
             7000
         );
 
-        return () => clearInterval(interval);
+        return () => {
+            clearInterval(interval);
+            canceled = true;
+        };
     }, [request] )
 
     return (
